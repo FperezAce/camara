@@ -1,0 +1,112 @@
+ 
+<div align="left" style="text-align:center">
+
+  <img width="300" alt="Bolsa de Santiago" src="../assets/images/bsantiago.png">
+  <h1>
+    {{ title }}
+  </h1>
+</div>
+<div id="grilla_full" style="padding-left:10px">
+ 
+  <ngb-tabset>
+      <ngb-tab title="Grilla Indicadores">
+        <ng-template ngbTabContent>  
+
+            <form style="padding-top:50px;padding-left:50px" > 
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Índice</label>
+                    <input type="text"  class="form-control" id="indice" value="" style="width:5%" [(ngModel)]="model.indice" name="indice" #indice="ngModel">  
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Periodo</label>
+                    <select class="form-control" id="periodo" [(ngModel)]="model.periodo" name="periodo" #periodo="ngModel" > 
+                      <option value="DI" selected >DIARIO</option>
+                      <option value="ME">MENSUAL</option>
+                      <option value="AN">ANUAL</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Por Periodo</label>
+
+                    <div class="form-control" style="width:50%">
+                      <div class="row" style="padding-left:5px;">
+                        <input class="form-control" placeholder="yyyy-mm-dd"
+                               name="f_desde" ngbDatepicker #d="ngbDatepicker" style="width:20%" [(ngModel)]="model.f_desde" name="f_desde" #f_desde="ngModel">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary" (click)="d.toggle()" type="button">
+                            <img src="../assets/images/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                          </button>
+                        </div>
+
+                        <input class="form-control" placeholder="yyyy-mm-dd"
+                               name="f_hasta" ngbDatepicker #d2="ngbDatepicker" style="width:20%;" [(ngModel)]="model.f_hasta" name="f_hasta" #f_hasta="ngModel">
+                        <div class="input-group-append">
+                          <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+                            <img src="../assets/images/calendar-icon.svg" style="width: 1.2rem; height: 1rem; cursor: pointer;"/>
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+
+                </div>
+                <button type="submit" class="btn btn-primary mb-2" (click)="buscarDatos(indice,periodo,f_desde,f_hasta)" >Buscar</button>
+              </form>
+
+              <div class="container_report" *ngIf="reporte_lista">
+                  <h1>Datos Encontrados</h1>
+                <table class="table table-hover" cellspacing="0">
+                    <thead>
+                      <tr>
+                        <th>Indice</th>
+                        <th>fecha</th>
+                        <th>Valor Actual</th>
+                        <th>Valor Anterior</th>
+                        <th>Valor Mayor</th>
+                        <th>Valor Menor</th>
+                        <th>Valor Promedio</th>
+                        <th>Variación Porcentual</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let reporte of reportes;last as isLast;"  >
+                        <td>{{reporte.indice}}</td>
+                        <td>{{reporte.fecha}}</td>
+                        <td>{{reporte.ind_act}}</td>
+                        <td>{{reporte.ind_ant}}</td>
+                        <td>{{reporte.ind_may}}</td>
+                        <td>{{reporte.ind_men}}</td>
+                        <td>{{reporte.ind_pro}}</td>
+                        <td>{{reporte.ind_var}}
+                            <span *ngIf="isLast" (onCreate)="loadingBar()" style="display:none"></span>
+                        </td> 
+                      </tr> 
+                    </tbody>
+                  </table>
+              </div>
+                  
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab title="Gráficos Indicadores">
+        <ng-template ngbTabContent>
+          
+          <div class="form-group">
+            <label for="exampleInputEmail1">Índice</label>
+            <select class="form-control form-control-lg" id="indice_g" [(ngModel)]="model.indice_g" name="indice_g" #indice_g="ngModel">
+              <option value="IGPA">IGPA</option>
+              <option value="IPSA">IPSA</option>
+              <option value="INTER">INTER-10</option>
+            </select>
+          </div> 
+          <button type="submit" class="btn btn-primary mb-2" (click)="buscarDatosChart(indice_g)" >Buscar</button>
+
+          <chart type="StockChart" [options]="options3" style="position: relative;overflow: hidden;/* width: 70%; */height: 400px;text-align: center;line-height: normal;z-index: 0;-webkit-tap-highlight-color: rgba(0, 0, 0, 0);"></chart>
+
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+
+
+
+</div> 
+
+
